@@ -1,0 +1,3 @@
+PySide6>=6.5
+pyodbc>=4.0.35
+python-dotenv>=1.0.0
