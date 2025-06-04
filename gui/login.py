@@ -1,7 +1,7 @@
-# gui/login_screen.py
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 from gui.list import EntryScreen
 from PySide6.QtGui import QIcon
+from db.queries import check_user_credentials  # ✅ Eklendi
 
 import os
 
@@ -45,11 +45,12 @@ class LoginScreen(QWidget):
         username = self.username_input.text()
         password = self.password_input.text()
 
-        if username == "admin" and password == "1234":
+        user_id = check_user_credentials(username, password)  # ✅ Veritabanından kontrol
+
+        if user_id:
             self.message_label.setText("✅ Giriş başarılı, yönlendiriliyorsunuz...")
             self.message_label.setStyleSheet("color: green; font-weight: bold;")
 
-            # Ekranı geçiş biraz gecikmeli yapabilirsin istersen (QTimer ile)
             self.hide()
             self.EntryScreen = EntryScreen()
             self.EntryScreen.show()
