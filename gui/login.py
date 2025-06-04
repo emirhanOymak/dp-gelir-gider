@@ -1,12 +1,18 @@
 # gui/login_screen.py
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
 from gui.list import EntryScreen
+from PySide6.QtGui import QIcon
+
+import os
 
 class LoginScreen(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Giriş Ekranı")
-        self.setGeometry(600, 300, 300, 150)
+        self.setWindowTitle("Data Platform - Giriş Ekranı")
+        self.setGeometry(600, 300, 300, 180)
+
+        icon_path = os.path.join(os.path.dirname(__file__), "../assets/icon.png")
+        self.setWindowIcon(QIcon(icon_path))
 
         layout = QVBoxLayout()
 
@@ -28,6 +34,11 @@ class LoginScreen(QWidget):
         self.login_button.clicked.connect(self.check_login)
         layout.addWidget(self.login_button)
 
+        # Geri Bildirim Mesajı (popup yerine)
+        self.message_label = QLabel("")
+        self.message_label.setStyleSheet("font-weight: bold; margin-top: 10px;")
+        layout.addWidget(self.message_label)
+
         self.setLayout(layout)
 
     def check_login(self):
@@ -35,11 +46,13 @@ class LoginScreen(QWidget):
         password = self.password_input.text()
 
         if username == "admin" and password == "1234":
-            QMessageBox.information(self, "Başarılı", "Giriş başarılı!")
+            self.message_label.setText("✅ Giriş başarılı, yönlendiriliyorsunuz...")
+            self.message_label.setStyleSheet("color: green; font-weight: bold;")
 
+            # Ekranı geçiş biraz gecikmeli yapabilirsin istersen (QTimer ile)
             self.hide()
             self.EntryScreen = EntryScreen()
             self.EntryScreen.show()
-
         else:
-            QMessageBox.warning(self, "Hata", "Kullanıcı adı veya şifre hatalı.")
+            self.message_label.setText("❌ Kullanıcı adı veya şifre hatalı.")
+            self.message_label.setStyleSheet("color: red; font-weight: bold;")

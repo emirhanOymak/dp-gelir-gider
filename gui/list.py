@@ -1,15 +1,19 @@
-# gui/entry_screen.py
 from PySide6.QtWidgets import (
     QWidget, QLabel, QComboBox, QVBoxLayout, QFormLayout,
     QDateEdit, QLineEdit, QPushButton, QMessageBox
 )
 from PySide6.QtCore import QDate
+import os
+from PySide6.QtGui import QIcon
 
 class EntryScreen(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Gider Giriş Ekranı")
         self.setGeometry(600, 300, 400, 300)
+
+        icon_path = os.path.join(os.path.dirname(__file__), "../assets/icon.png")
+        self.setWindowIcon(QIcon(icon_path))
 
         self.init_ui()
 
@@ -77,6 +81,6 @@ class EntryScreen(QWidget):
         try:
             tutar_float = float(tutar)
             QMessageBox.information(self, "Başarılı", f"Gider kaydedildi:\n{gider_turu} - {tutar_float} TL")
-            # TODO: Veritabanına yaz
+
         except ValueError:
             QMessageBox.warning(self, "Hatalı Giriş", "Tutar sayısal bir değer olmalı.")
