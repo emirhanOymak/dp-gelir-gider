@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
-from gui.list import EntryScreen
 from PySide6.QtGui import QIcon
-from db.queries import check_user_credentials  # ✅ Eklendi
+from db.queries.kullanici_queries import check_user_credentials
+from models.kullanici import Kullanici
+from gui.main_screen import MainScreen
 
 import os
 
@@ -16,25 +17,21 @@ class LoginScreen(QWidget):
 
         layout = QVBoxLayout()
 
-        # Kullanıcı Adı
         self.username_input = QLineEdit()
         self.username_input.setPlaceholderText("Kullanıcı adı")
         layout.addWidget(QLabel("Kullanıcı Adı:"))
         layout.addWidget(self.username_input)
 
-        # Şifre
         self.password_input = QLineEdit()
         self.password_input.setPlaceholderText("Şifre")
         self.password_input.setEchoMode(QLineEdit.Password)
         layout.addWidget(QLabel("Şifre:"))
         layout.addWidget(self.password_input)
 
-        # Giriş Butonu
         self.login_button = QPushButton("Giriş Yap")
         self.login_button.clicked.connect(self.check_login)
         layout.addWidget(self.login_button)
 
-        # Geri Bildirim Mesajı (popup yerine)
         self.message_label = QLabel("")
         self.message_label.setStyleSheet("font-weight: bold; margin-top: 10px;")
         layout.addWidget(self.message_label)
@@ -45,15 +42,15 @@ class LoginScreen(QWidget):
         username = self.username_input.text()
         password = self.password_input.text()
 
-        user_id = check_user_credentials(username, password)  # ✅ Veritabanından kontrol
+        kullanici: Kullanici = check_user_credentials(username, password)
 
-        if user_id:
+        if kullanici:
             self.message_label.setText("✅ Giriş başarılı, yönlendiriliyorsunuz...")
             self.message_label.setStyleSheet("color: green; font-weight: bold;")
 
             self.hide()
-            self.EntryScreen = EntryScreen()
-            self.EntryScreen.show()
+            self.main_screen = MainScreen()
+            self.main_screen.show()
         else:
             self.message_label.setText("❌ Kullanıcı adı veya şifre hatalı.")
             self.message_label.setStyleSheet("color: red; font-weight: bold;")

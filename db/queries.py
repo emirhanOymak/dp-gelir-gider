@@ -1,6 +1,9 @@
-
 from db.connection import get_connection
-
+from models.kullanici import Kullanici
+from models.odeme_turu import OdemeTuru
+from models.butce_kalemi import ButceKalemi
+from models.hesap_adi import HesapAdi
+from models.gider import Gider
 
 # ========== READ: Dropdownlar için ==========
 def get_odeme_turleri():
@@ -11,12 +14,13 @@ def get_odeme_turleri():
     try:
         cursor = conn.cursor()
         cursor.execute("SELECT odemeTuruId, ad FROM OdemeTuru ORDER BY ad")
-        return cursor.fetchall()
+        return [OdemeTuru(*row) for row in cursor.fetchall()]
     except Exception as e:
         print("Odeme türleri alınırken hata:", e)
         return []
     finally:
         conn.close()
+
 
 
 def get_butce_kalemleri_by_odeme_id(odemeTuruId):
@@ -27,9 +31,9 @@ def get_butce_kalemleri_by_odeme_id(odemeTuruId):
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT butceKalemiId, ad FROM ButceKalemi WHERE odemeTuruId = ? ORDER BY ad",
+            "SELECT butceKalemiId, ad, odemeTuruId FROM ButceKalemi WHERE odemeTuruId = ? ORDER BY ad",
             (odemeTuruId,))
-        return cursor.fetchall()
+        return [ButceKalemi(*row) for row in cursor.fetchall()]
     except Exception as e:
         print("Bütçe kalemleri alınırken hata:", e)
         return []
@@ -45,14 +49,15 @@ def get_hesap_adlari_by_kalem_id(butceKalemiId):
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT hesapAdiId, ad FROM HesapAdi WHERE butceKalemiId = ? ORDER BY ad",
+            "SELECT hesapAdiId, ad, butceKalemiId FROM HesapAdi WHERE butceKalemiId = ? ORDER BY ad",
             (butceKalemiId,))
-        return cursor.fetchall()
+        return [HesapAdi(*row) for row in cursor.fetchall()]
     except Exception as e:
         print("Hesap adları alınırken hata:", e)
         return []
     finally:
         conn.close()
+
 
 
 # ========== CREATE ==========
@@ -85,20 +90,20 @@ def get_all_giderler():
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT g.giderId, o.ad as odemeTuru, b.ad as butceKalemi, h.ad as hesapAdi, "
-            "g.aciklama, g.tarih, g.tutar "
+            "SELECT g.giderId, o.ad, b.ad, h.ad, g.aciklama, g.tarih, g.tutar "
             "FROM Gider g "
             "JOIN OdemeTuru o ON g.odemeTuruId = o.odemeTuruId "
             "JOIN ButceKalemi b ON g.butceKalemiId = b.butceKalemiId "
             "JOIN HesapAdi h ON g.hesapAdiId = h.hesapAdiId "
             "ORDER BY g.tarih DESC"
         )
-        return cursor.fetchall()
+        return [Gider(*row) for row in cursor.fetchall()]
     except Exception as e:
         print("Giderler listelenirken hata:", e)
         return []
     finally:
         conn.close()
+
 
 
 # ========== UPDATE ==========
@@ -147,16 +152,18 @@ def check_user_credentials(username, password):
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT kullaniciId FROM Kullanici WHERE kullaniciAdi = ? AND sifre = ?",
+            "SELECT kullaniciId, kullaniciAdi, sifre, olusturmaTarihi FROM Kullanici "
+            "WHERE kullaniciAdi = ? AND sifre = ?",
             (username, password)
         )
-        result = cursor.fetchone()
-        return result[0] if result else None
+        row = cursor.fetchone()
+        return Kullanici(*row) if row else None
     except Exception as e:
         print("Kullanıcı doğrulama hatası:", e)
         return None
     finally:
         conn.close()
+
 
 
 # ========== KULLANICI: CREATE ==========

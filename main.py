@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication, QWidget
-from gui.login import LoginScreen
+from gui.login_screen import LoginScreen
 from db.connection import get_connection
 
 def test_db_connection():
