@@ -8,6 +8,8 @@ from gui.add_structure_screen import AddStructureScreen
 from gui.add_expense_screen import AddExpenseScreen
 from db.queries.gider_queries import get_all_giderler, delete_gider
 from gui.edit_expense_screen import EditExpenseScreen
+from utils.logger import log_info, log_error
+from gui.log_viewer_screen import LogViewerScreen
 
 import os
 
@@ -43,8 +45,9 @@ class MainScreen(QWidget):
         self.expense_button = QPushButton("💸 Yeni Gider Ekle")
         self.edit_button = QPushButton("✏️ İşlem Düzenle")
         self.delete_button = QPushButton("🗑️ İşlemi Sil")
+        self.log_button = QPushButton("📄 Logları Gör")
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -55,6 +58,7 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.expense_button)
         self.menu_layout.addWidget(self.edit_button)
         self.menu_layout.addWidget(self.delete_button)
+        self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addStretch()
 
         # Logo
@@ -133,6 +137,7 @@ class MainScreen(QWidget):
         self.expense_button.clicked.connect(self.ac_yeni_gider_ekrani)
         self.delete_button.clicked.connect(self.delete_selected)
         self.edit_button.clicked.connect(self.ac_duzenleme_ekrani)
+        self.log_button.clicked.connect(self.ac_log_ekrani)
 
         self.load_data()
 
@@ -160,12 +165,14 @@ class MainScreen(QWidget):
         if confirm == QMessageBox.Yes:
             success = delete_gider(self.selected_gider_id)
             if success:
+                log_info(f"Gider silindi - ID: {self.selected_gider_id}")
                 QMessageBox.information(self, "Başarılı", "Kayıt silindi.")
                 self.load_data()
                 self.selected_gider_id = None
                 self.edit_button.setEnabled(False)
                 self.delete_button.setEnabled(False)
             else:
+                log_error("Gider silinemedi", f"ID: {self.selected_gider_id}")
                 QMessageBox.critical(self, "Hata", "Kayıt silinemedi.")
 
     def ac_yeni_yapi_ekrani(self):
@@ -176,6 +183,10 @@ class MainScreen(QWidget):
         self.expense_screen = AddExpenseScreen()
         self.expense_screen.gider_eklendi_callback = self.load_data
         self.expense_screen.show()
+
+    def ac_log_ekrani(self):
+        self.log_viewer = LogViewerScreen()
+        self.log_viewer.show()
 
     def ac_duzenleme_ekrani(self):
         if self.selected_gider_id is None:

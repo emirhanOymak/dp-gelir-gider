@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QComboBox, QLin
 from PySide6.QtCore import QDate
 from db.queries.gider_queries import update_gider
 from db.queries.odeme_queries import get_odeme_turleri, get_butce_kalemleri_by_odeme_id, get_hesap_adlari_by_kalem_id
+from utils.logger import log_info, log_error
 
 class EditExpenseScreen(QWidget):
     def __init__(self, gider, on_update_callback=None):
@@ -116,14 +117,17 @@ class EditExpenseScreen(QWidget):
         try:
             tutar = float(self.tutar_input.text())
         except ValueError:
+            log_info(f"Gider guncelleme basarisiz: Gecersiz tutar girdisi")
             QMessageBox.warning(self, "Hata", "Tutar geçersiz.")
             return
 
         success = update_gider(self.gider.giderId, odeme_id, kalem_id, hesap_id, aciklama, tarih, tutar)
         if success:
+            log_info(f"Gider guncellendi - ID: {self.gider.giderId}, Yeni Tutar: {tutar}, Tarih: {tarih}, Aciklama: {aciklama}")
             QMessageBox.information(self, "Başarılı", "Gider güncellendi.")
             if self.on_update_callback:
                 self.on_update_callback()
             self.close()
         else:
+            log_error("Gider guncelleme basarisiz", f"ID: {self.gider.giderId}")
             QMessageBox.critical(self, "Hata", "Güncelleme başarısız.")

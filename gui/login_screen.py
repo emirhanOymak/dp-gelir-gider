@@ -3,6 +3,7 @@ from PySide6.QtGui import QIcon
 from db.queries.kullanici_queries import check_user_credentials
 from models.kullanici import Kullanici
 from gui.main_screen import MainScreen
+from utils.logger import log_info, log_warning
 
 import os
 
@@ -45,6 +46,7 @@ class LoginScreen(QWidget):
         kullanici: Kullanici = check_user_credentials(username, password)
 
         if kullanici:
+            log_info(f"Giris basarili - Kullanici: {username}")  # ✅
             self.message_label.setText("✅ Giriş başarılı, yönlendiriliyorsunuz...")
             self.message_label.setStyleSheet("color: green; font-weight: bold;")
 
@@ -52,5 +54,6 @@ class LoginScreen(QWidget):
             self.main_screen = MainScreen()
             self.main_screen.show()
         else:
+            log_warning(f"Giris basarisiz - Kullanici: {username}")  # ❌
             self.message_label.setText("❌ Kullanıcı adı veya şifre hatalı.")
             self.message_label.setStyleSheet("color: red; font-weight: bold;")

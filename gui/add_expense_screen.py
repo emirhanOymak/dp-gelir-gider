@@ -9,6 +9,7 @@ from db.queries.odeme_queries import (
 )
 from db.queries.gider_queries import add_gider
 import os
+from utils.logger import log_info, log_error
 
 class AddExpenseScreen(QWidget):
     def __init__(self):
@@ -112,11 +113,14 @@ class AddExpenseScreen(QWidget):
 
             success = add_gider(odeme_id, kalem_id, hesap_id, aciklama, tarih, tutar)
             if success:
-                QMessageBox.information(self, "Başarılı", "Gider eklendi.")
+                log_info(f"Gider eklendi - Odeme Turu ID: {odeme_id}, Kalem ID: {kalem_id}, Hesap ID: {hesap_id}, Tutar: {tutar}, Tarih: {tarih}, Aciklama: {aciklama}")
+                QMessageBox.information(self, "Basarili", "Gider eklendi.")
                 if self.gider_eklendi_callback:
                     self.gider_eklendi_callback()
                 self.close()
             else:
+                log_error("Gider eklenemedi", "Veritabanı hatası")
                 QMessageBox.critical(self, "Hata", "Veritabanı hatası oluştu.")
-        except ValueError:
+        except ValueError as e:
+            log_error("Gider eklenirken hata", e)
             QMessageBox.warning(self, "Hatalı Tutar", "Lütfen geçerli bir tutar girin.")
