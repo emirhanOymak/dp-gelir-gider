@@ -142,12 +142,26 @@ class MainScreen(QWidget):
         """)
         self.table.cellClicked.connect(self.on_row_selected)
 
+        # Kullanıcı bilgi etiketi
+        user_info_label = QLabel(f"Giriş Yapan: {self.kullanici.kullaniciAdi}  ({self.kullanici.rol.upper()})")
+
+        # Rol bazlı renk ayarı
+        if self.kullanici.rol == "admin":
+            user_info_label.setStyleSheet("color: red; font-weight: bold; font-size: 14px;")
+        elif self.kullanici.rol == "kullanici":
+            user_info_label.setStyleSheet("color: green; font-weight: bold; font-size: 14px;")
+        else:
+            user_info_label.setStyleSheet("color: gray; font-weight: bold; font-size: 14px;")
+
+        # Ekrana ekle
+
+
         right_panel = QWidget()
         right_layout = QVBoxLayout()
         right_layout.setContentsMargins(10, 10, 10, 10)
         right_layout.setSpacing(10)
         right_panel.setLayout(right_layout)
-
+        right_layout.addWidget(user_info_label)
         right_layout.addWidget(QLabel("Gider Listesi"))
 
         # Filtre Alanları
