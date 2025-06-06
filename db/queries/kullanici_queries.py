@@ -10,7 +10,7 @@ def check_user_credentials(username, password):
     try:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT kullaniciId, kullaniciAdi, sifre, olusturmaTarihi FROM Kullanici "
+            "SELECT kullaniciId, kullaniciAdi, sifre, olusturmaTarihi, rol FROM Kullanici "
             "WHERE kullaniciAdi = ? AND sifre = ?",
             (username, password)
         )

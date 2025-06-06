@@ -19,8 +19,9 @@ from PySide6.QtCore import QDate
 import os
 
 class MainScreen(QWidget):
-    def __init__(self):
+    def __init__(self , kullanici):
         super().__init__()
+        self.kullanici = kullanici
         self.setWindowTitle("DP Muhasebe Paneli")
         self.setGeometry(400, 150, 1000, 600)
         self.setFixedSize(self.width(), self.height())
@@ -54,6 +55,18 @@ class MainScreen(QWidget):
         self.log_button = QPushButton("📄 Logları Gör")
         self.summary_button = QPushButton("📊 Aylık Özet")
         self.export_button = QPushButton("📤 Giderleri Excel’e Aktar")
+
+        # Rol bazlı buton kısıtlamaları
+        if self.kullanici.rol == "kullanici":
+            self.delete_button.setEnabled(False)  # sadece admin silebilir
+            self.log_button.setEnabled(False)
+
+        if self.kullanici.rol == "izleyici":
+            self.expense_button.setEnabled(False)
+            self.create_button.setEnabled(False)
+            self.edit_button.setEnabled(False)
+            self.delete_button.setEnabled(False)
+            self.log_button.setEnabled(False)
 
         for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button]:
             btn.setCursor(Qt.PointingHandCursor)

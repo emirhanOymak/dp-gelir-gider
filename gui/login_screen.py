@@ -51,7 +51,7 @@ class LoginScreen(QWidget):
             self.message_label.setStyleSheet("color: green; font-weight: bold;")
 
             self.hide()
-            self.main_screen = MainScreen()
+            self.main_screen = MainScreen(kullanici=kullanici)
             self.main_screen.show()
         else:
             log_warning(f"Giris basarisiz - Kullanici: {username}")  # ❌
