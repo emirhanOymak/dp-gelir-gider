@@ -10,6 +10,7 @@ from db.queries.gider_queries import get_all_giderler, delete_gider
 from gui.edit_expense_screen import EditExpenseScreen
 from utils.logger import log_info, log_error
 from gui.log_viewer_screen import LogViewerScreen
+from gui.monthly_summary_screen import MonthlySummaryScreen
 
 import os
 
@@ -46,8 +47,9 @@ class MainScreen(QWidget):
         self.edit_button = QPushButton("✏️ İşlem Düzenle")
         self.delete_button = QPushButton("🗑️ İşlemi Sil")
         self.log_button = QPushButton("📄 Logları Gör")
+        self.summary_button = QPushButton("📊 Aylık Özet")
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -59,6 +61,7 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.edit_button)
         self.menu_layout.addWidget(self.delete_button)
         self.menu_layout.addWidget(self.log_button)
+        self.menu_layout.addWidget(self.summary_button)
         self.menu_layout.addStretch()
 
         # Logo
@@ -138,6 +141,7 @@ class MainScreen(QWidget):
         self.delete_button.clicked.connect(self.delete_selected)
         self.edit_button.clicked.connect(self.ac_duzenleme_ekrani)
         self.log_button.clicked.connect(self.ac_log_ekrani)
+        self.summary_button.clicked.connect(self.ac_aylik_ozet_ekrani)
 
         self.load_data()
 
@@ -187,6 +191,10 @@ class MainScreen(QWidget):
     def ac_log_ekrani(self):
         self.log_viewer = LogViewerScreen()
         self.log_viewer.show()
+
+    def ac_aylik_ozet_ekrani(self):
+        self.ozet_ekrani = MonthlySummaryScreen()
+        self.ozet_ekrani.show()
 
     def ac_duzenleme_ekrani(self):
         if self.selected_gider_id is None:
