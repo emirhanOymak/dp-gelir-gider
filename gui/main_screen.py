@@ -13,6 +13,8 @@ from gui.log_viewer_screen import LogViewerScreen
 from gui.monthly_summary_screen import MonthlySummaryScreen
 from openpyxl import Workbook
 from PySide6.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QDateEdit, QLineEdit
+from PySide6.QtCore import QDate
 
 import os
 
@@ -26,6 +28,7 @@ class MainScreen(QWidget):
         self.setWindowIcon(QIcon(icon_path))
 
         self.selected_gider_id = None
+        self.filtered_giderler = []
         self.init_ui()
 
     def init_ui(self):
@@ -133,6 +136,39 @@ class MainScreen(QWidget):
         right_panel.setLayout(right_layout)
 
         right_layout.addWidget(QLabel("Gider Listesi"))
+
+        # Filtre Alanları
+        filter_layout = QHBoxLayout()
+
+        self.start_date = QDateEdit()
+        self.start_date.setCalendarPopup(True)
+        self.start_date.setDisplayFormat("yyyy-MM-dd")
+        self.start_date.setDate(QDate.currentDate().addMonths(-1))  # Varsayılan: bir ay geriden başla
+        filter_layout.addWidget(QLabel("Başlangıç Tarihi:"))
+        filter_layout.addWidget(self.start_date)
+
+        self.end_date = QDateEdit()
+        self.end_date.setCalendarPopup(True)
+        self.end_date.setDisplayFormat("yyyy-MM-dd")
+        self.end_date.setDate(QDate.currentDate())
+        filter_layout.addWidget(QLabel("Bitiş Tarihi:"))
+        filter_layout.addWidget(self.end_date)
+
+        self.aciklama_input = QLineEdit()
+        self.aciklama_input.setPlaceholderText("Açıklama içeriği")
+        filter_layout.addWidget(QLabel("Açıklama:"))
+        filter_layout.addWidget(self.aciklama_input)
+
+        self.filter_button = QPushButton("🔍 Filtrele")
+        self.filter_button.clicked.connect(self.apply_filters)
+        filter_layout.addWidget(self.filter_button)
+
+        self.reset_button = QPushButton("♻️ Tümünü Göster")
+        self.reset_button.clicked.connect(self.load_data)
+        filter_layout.addWidget(self.reset_button)
+
+        right_layout.addLayout(filter_layout)
+
         right_layout.addWidget(self.table)
 
         # Ana Layout'a Ekle
@@ -150,10 +186,12 @@ class MainScreen(QWidget):
 
         self.load_data()
 
-    def load_data(self):
+    def load_data(self, filtered=False):
         self.table.setRowCount(0)
-        self.giderler = get_all_giderler()
-        for row_idx, gider in enumerate(self.giderler):
+        source = self.filtered_giderler if filtered else get_all_giderler()
+        self.giderler = source if not filtered else self.giderler  # Ana listeyi sadece ilk yüklemede güncelle
+
+        for row_idx, gider in enumerate(source):
             self.table.insertRow(row_idx)
             self.table.setItem(row_idx, 0, QTableWidgetItem(gider.odemeTuru))
             self.table.setItem(row_idx, 1, QTableWidgetItem(gider.butceKalemi))
@@ -161,6 +199,17 @@ class MainScreen(QWidget):
             self.table.setItem(row_idx, 3, QTableWidgetItem(gider.aciklama))
             self.table.setItem(row_idx, 4, QTableWidgetItem(gider.tarih.strftime("%Y-%m-%d")))
             self.table.setItem(row_idx, 5, QTableWidgetItem(f"{gider.tutar:.2f}"))
+
+    def apply_filters(self):
+        start_date = self.start_date.date().toPython()
+        end_date = self.end_date.date().toPython()
+        search_text = self.aciklama_input.text().lower()
+
+        self.filtered_giderler = [
+            gider for gider in self.giderler
+            if start_date <= gider.tarih <= end_date and search_text in gider.aciklama.lower()
+        ]
+        self.load_data(filtered=True)
 
     def on_row_selected(self, row, _column):
         self.selected_gider_id = self.giderler[row].giderId
@@ -202,7 +251,9 @@ class MainScreen(QWidget):
         self.ozet_ekrani.show()
 
     def export_to_excel(self):
-        if not self.giderler:
+        export_list = self.filtered_giderler if self.filtered_giderler else self.giderler
+
+        if not export_list:
             QMessageBox.warning(self, "Uyarı", "Aktarılacak gider verisi bulunamadı.")
             return
 
@@ -219,7 +270,7 @@ class MainScreen(QWidget):
             ws.append(["Ödeme Türü", "Bütçe Kalemi", "Hesap Adı", "Açıklama", "Tarih", "Tutar"])
 
             # Gider verileri
-            for gider in self.giderler:
+            for gider in export_list:
                 ws.append([
                     gider.odemeTuru,
                     gider.butceKalemi,
