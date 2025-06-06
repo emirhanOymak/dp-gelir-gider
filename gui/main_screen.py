@@ -11,6 +11,8 @@ from gui.edit_expense_screen import EditExpenseScreen
 from utils.logger import log_info, log_error
 from gui.log_viewer_screen import LogViewerScreen
 from gui.monthly_summary_screen import MonthlySummaryScreen
+from openpyxl import Workbook
+from PySide6.QtWidgets import QFileDialog
 
 import os
 
@@ -48,8 +50,9 @@ class MainScreen(QWidget):
         self.delete_button = QPushButton("🗑️ İşlemi Sil")
         self.log_button = QPushButton("📄 Logları Gör")
         self.summary_button = QPushButton("📊 Aylık Özet")
+        self.export_button = QPushButton("📤 Giderleri Excel’e Aktar")
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -62,6 +65,7 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.delete_button)
         self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addWidget(self.summary_button)
+        self.menu_layout.addWidget(self.export_button)
         self.menu_layout.addStretch()
 
         # Logo
@@ -142,6 +146,7 @@ class MainScreen(QWidget):
         self.edit_button.clicked.connect(self.ac_duzenleme_ekrani)
         self.log_button.clicked.connect(self.ac_log_ekrani)
         self.summary_button.clicked.connect(self.ac_aylik_ozet_ekrani)
+        self.export_button.clicked.connect(self.export_to_excel)
 
         self.load_data()
 
@@ -195,6 +200,40 @@ class MainScreen(QWidget):
     def ac_aylik_ozet_ekrani(self):
         self.ozet_ekrani = MonthlySummaryScreen()
         self.ozet_ekrani.show()
+
+    def export_to_excel(self):
+        if not self.giderler:
+            QMessageBox.warning(self, "Uyarı", "Aktarılacak gider verisi bulunamadı.")
+            return
+
+        path, _ = QFileDialog.getSaveFileName(self, "Excel Dosyası Kaydet", "giderler.xlsx", "Excel Dosyası (*.xlsx)")
+        if not path:
+            return
+
+        try:
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "Giderler"
+
+            # Başlıklar
+            ws.append(["Ödeme Türü", "Bütçe Kalemi", "Hesap Adı", "Açıklama", "Tarih", "Tutar"])
+
+            # Gider verileri
+            for gider in self.giderler:
+                ws.append([
+                    gider.odemeTuru,
+                    gider.butceKalemi,
+                    gider.hesapAdi,
+                    gider.aciklama,
+                    gider.tarih.strftime("%Y-%m-%d"),
+                    float(gider.tutar)
+                ])
+
+            wb.save(path)
+            QMessageBox.information(self, "Başarılı", f"Giderler başarıyla kaydedildi:\n{path}")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Hata", f"Excel aktarımı sırasında bir hata oluştu:\n{str(e)}")
 
     def ac_duzenleme_ekrani(self):
         if self.selected_gider_id is None:

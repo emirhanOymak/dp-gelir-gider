@@ -1,12 +1,13 @@
-import os
-
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTableWidget, QTableWidgetItem
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTableWidget, QTableWidgetItem, QPushButton, QHBoxLayout, QFileDialog, QMessageBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from db.queries.gider_queries import get_all_giderler
 from collections import defaultdict
 import datetime
+import os
+import openpyxl
 
 class MonthlySummaryScreen(QWidget):
     def __init__(self):
@@ -36,24 +37,29 @@ class MonthlySummaryScreen(QWidget):
         self.table.setHorizontalHeaderLabels(["Ay", "Toplam Gider (₺)"])
         layout.addWidget(self.table)
 
+        # Excel'e Aktar Butonu
+        self.export_button = QPushButton("📤 Excel'e Aktar")
+        self.export_button.clicked.connect(self.export_to_excel)
+        layout.addWidget(self.export_button, alignment=Qt.AlignRight)
+
         self.setLayout(layout)
 
         self.plot_and_list_data()
 
     def plot_and_list_data(self):
-        giderler = get_all_giderler()
+        self.giderler = get_all_giderler()
 
         # Ay bazlı toplama
-        aylik_toplamlar = defaultdict(float)
-        for gider in giderler:
+        self.aylik_toplamlar = defaultdict(float)
+        for gider in self.giderler:
             ay = gider.tarih.strftime("%Y-%m")
-            aylik_toplamlar[ay] += float(gider.tutar)
+            self.aylik_toplamlar[ay] += float(gider.tutar)
 
         # Grafiği çiz
         ax = self.canvas.figure.subplots()
         ax.clear()
-        aylar = sorted(aylik_toplamlar.keys())
-        tutarlar = [aylik_toplamlar[ay] for ay in aylar]
+        aylar = sorted(self.aylik_toplamlar.keys())
+        tutarlar = [self.aylik_toplamlar[ay] for ay in aylar]
 
         ax.bar(aylar, tutarlar)
         ax.set_title("Aylık Giderler")
@@ -63,7 +69,27 @@ class MonthlySummaryScreen(QWidget):
         self.canvas.draw()
 
         # Tabloyu doldur
-        self.table.setRowCount(len(aylik_toplamlar))
+        self.table.setRowCount(len(self.aylik_toplamlar))
         for row, ay in enumerate(aylar):
             self.table.setItem(row, 0, QTableWidgetItem(ay))
-            self.table.setItem(row, 1, QTableWidgetItem(f"{aylik_toplamlar[ay]:.2f}"))
+            self.table.setItem(row, 1, QTableWidgetItem(f"{self.aylik_toplamlar[ay]:.2f}"))
+
+    def export_to_excel(self):
+        file_path, _ = QFileDialog.getSaveFileName(self, "Excel'e Kaydet", "", "Excel Files (*.xlsx)")
+        if not file_path:
+            return
+
+        try:
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.title = "Aylık Gider Özeti"
+
+            # Başlık
+            ws.append(["Ay", "Toplam Gider (₺)"])
+            for ay, tutar in sorted(self.aylik_toplamlar.items()):
+                ws.append([ay, round(tutar, 2)])
+
+            wb.save(file_path)
+            QMessageBox.information(self, "Başarılı", "Excel dosyası oluşturuldu.")
+        except Exception as e:
+            QMessageBox.critical(self, "Hata", f"Dosya oluşturulamadı: {str(e)}")
