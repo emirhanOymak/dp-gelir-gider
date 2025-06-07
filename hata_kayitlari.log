@@ -81,3 +81,14 @@
 2025-06-07 03:51:53,022 - INFO - Giris basarili - Kullanici: admin1
 2025-06-07 04:10:10,360 - INFO - Giris basarili - Kullanici: admin1
 2025-06-07 04:10:38,117 - INFO - Import Islemi Basarili
+2025-06-07 12:39:53,060 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 12:41:28,534 - WARNING - Giris basarisiz - Kullanici: kullanýcý1
+2025-06-07 12:41:42,750 - INFO - Giris basarili - Kullanici: kullanici1
+2025-06-07 12:43:33,254 - INFO - Giris basarili - Kullanici: izleyici1
+2025-06-07 12:44:10,054 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 12:50:45,611 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 12:50:45,611 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 12:59:26,968 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 13:04:06,699 - INFO - Import Islemi Basarili
+2025-06-07 13:05:53,874 - INFO - Import Islemi Basarili
+2025-06-07 13:17:10,265 - INFO - generated new fontManager
