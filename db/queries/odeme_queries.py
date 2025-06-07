@@ -54,3 +54,33 @@ def get_hesap_adlari_by_kalem_id(butceKalemiId):
         return []
     finally:
         conn.close()
+
+def get_butce_kalemleri():
+    conn = get_connection()
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT butceKalemiId, ad, odemeTuruId FROM ButceKalemi ORDER BY ad")
+        return [ButceKalemi(*row) for row in cursor.fetchall()]
+    except Exception as e:
+        print("Tüm bütçe kalemleri alınırken hata:", e)
+        return []
+    finally:
+        conn.close()
+
+def get_hesap_adlari():
+    conn = get_connection()
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT hesapAdiId, ad, butceKalemiId FROM HesapAdi ORDER BY ad")
+        return [HesapAdi(*row) for row in cursor.fetchall()]
+    except Exception as e:
+        print("Tüm hesap adları alınırken hata:", e)
+        return []
+    finally:
+        conn.close()

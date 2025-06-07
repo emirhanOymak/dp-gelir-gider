@@ -16,6 +16,15 @@ from PySide6.QtWidgets import QFileDialog
 from PySide6.QtWidgets import QDateEdit, QLineEdit
 from PySide6.QtCore import QDate
 from gui.calendar_view_screen import CalendarViewScreen
+import pandas as pd
+from PySide6.QtWidgets import QFileDialog
+from db.queries.gider_queries import add_gider
+from db.queries.odeme_queries import (
+    get_odeme_turleri,
+    get_butce_kalemleri,
+    get_hesap_adlari
+)
+
 
 import os
 
@@ -56,6 +65,7 @@ class MainScreen(QWidget):
         self.log_button = QPushButton("📄 Logları Gör")
         self.summary_button = QPushButton("📊 Aylık Özet")
         self.export_button = QPushButton("📤 Giderleri Excel’e Aktar")
+        self.import_button = QPushButton("📥 Excel'den İçe Aktar")
         self.calendar_button = QPushButton("📅 Takvim Görünümüne Geç")
 
         # Rol bazlı buton kısıtlamaları
@@ -70,7 +80,7 @@ class MainScreen(QWidget):
             self.delete_button.setEnabled(False)
             self.log_button.setEnabled(False)
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.calendar_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -84,6 +94,7 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addWidget(self.summary_button)
         self.menu_layout.addWidget(self.export_button)
+        self.menu_layout.addWidget(self.import_button)
         self.menu_layout.addWidget(self.calendar_button)
         self.menu_layout.addStretch()
 
@@ -213,6 +224,7 @@ class MainScreen(QWidget):
         self.log_button.clicked.connect(self.ac_log_ekrani)
         self.summary_button.clicked.connect(self.ac_aylik_ozet_ekrani)
         self.export_button.clicked.connect(self.export_to_excel)
+        self.import_button.clicked.connect(self.excelden_aktar)
         self.calendar_button.clicked.connect(self.ac_takvim_ekrani)
 
         self.load_data()
@@ -323,6 +335,40 @@ class MainScreen(QWidget):
 
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Excel aktarımı sırasında bir hata oluştu:\n{str(e)}")
+
+    def excelden_aktar(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Excel Dosyası Seç", "", "Excel Files (*.xlsx)")
+        if not file_path:
+            return
+
+        try:
+            df = pd.read_excel(file_path)
+
+            # Gerekli lookup tablolarını al
+            odeme_lookup = {x.ad: x.odemeTuruId for x in get_odeme_turleri()}
+            kalem_lookup = {x.ad: x.butceKalemiId for x in get_butce_kalemleri()}
+            hesap_lookup = {x.ad: x.hesapAdiId for x in get_hesap_adlari()}
+
+            eklenen = 0
+            for _, row in df.iterrows():
+                odeme_id = odeme_lookup.get(str(row["ödeme türü"]).strip())
+                kalem_id = kalem_lookup.get(str(row["bütçe kalemi"]).strip())
+                hesap_id = hesap_lookup.get(str(row["hesap adı"]).strip())
+                aciklama = str(row["açıklama"])
+                tarih = str(pd.to_datetime(row["tarih"]).date())
+                tutar = float(row["tutar"])
+
+                if None in (odeme_id, kalem_id, hesap_id):
+                    continue  # geçersiz eşleşme
+
+                if add_gider(odeme_id, kalem_id, hesap_id, aciklama, tarih, tutar):
+                    eklenen += 1
+
+            QMessageBox.information(self, "Başarılı", f"{eklenen} gider başarıyla eklendi.")
+            self.load_data()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Hata", f"Dosya okunamadı veya işlem yapılamadı.\n\n{str(e)}")
 
     def ac_duzenleme_ekrani(self):
         if self.selected_gider_id is None:
