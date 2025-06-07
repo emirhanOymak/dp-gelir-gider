@@ -51,3 +51,26 @@
 2025-06-07 02:31:12,935 - INFO - Giris basarili - Kullanici: admin
 2025-06-07 02:35:52,592 - INFO - Giris basarili - Kullanici: admin1
 2025-06-07 02:36:13,042 - INFO - Giris basarili - Kullanici: kullanici1
+2025-06-07 02:37:41,426 - WARNING - Giris basarisiz - Kullanici: izleyici1
+2025-06-07 02:37:49,153 - INFO - Giris basarili - Kullanici: izleyici1
+2025-06-07 02:56:17,147 - INFO - Giris basarili - Kullanici: admin
+2025-06-07 02:57:16,957 - INFO - Giris basarili - Kullanici: admin
+2025-06-07 02:57:48,132 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 02:58:44,286 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 02:59:39,120 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 03:18:41,555 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 03:19:54,036 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 03:23:55,391 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 03:26:58,264 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 03:29:12,337 - INFO - Gider eklendi - Odeme Turu ID: 1, Kalem ID: 24, Hesap ID: 28, Tutar: 3021.0, Tarih: 2025-06-21, Aciklama: BuBirDenemedir
+2025-06-07 03:32:10,670 - WARNING - Giris basarisiz - Kullanici: admin
+2025-06-07 03:32:13,862 - INFO - Giris basarili - Kullanici: admin1
+2025-06-07 03:32:22,142 - INFO - Gider silindi - ID: 13
+2025-06-07 03:32:25,836 - INFO - Gider silindi - ID: 9
+2025-06-07 03:32:51,084 - INFO - Gider eklendi - Odeme Turu ID: 12, Kalem ID: 23, Hesap ID: 27, Tutar: 6542.0, Tarih: 2025-06-22, Aciklama: TelsizTelkom
+2025-06-07 03:33:09,477 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 03:33:09,477 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 03:33:13,048 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 03:33:13,048 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 03:33:19,090 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-07 03:33:19,090 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.

@@ -15,6 +15,7 @@ from openpyxl import Workbook
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtWidgets import QDateEdit, QLineEdit
 from PySide6.QtCore import QDate
+from gui.calendar_view_screen import CalendarViewScreen
 
 import os
 
@@ -55,6 +56,7 @@ class MainScreen(QWidget):
         self.log_button = QPushButton("📄 Logları Gör")
         self.summary_button = QPushButton("📊 Aylık Özet")
         self.export_button = QPushButton("📤 Giderleri Excel’e Aktar")
+        self.calendar_button = QPushButton("📅 Takvim Görünümüne Geç")
 
         # Rol bazlı buton kısıtlamaları
         if self.kullanici.rol == "kullanici":
@@ -68,7 +70,7 @@ class MainScreen(QWidget):
             self.delete_button.setEnabled(False)
             self.log_button.setEnabled(False)
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.calendar_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -82,6 +84,7 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addWidget(self.summary_button)
         self.menu_layout.addWidget(self.export_button)
+        self.menu_layout.addWidget(self.calendar_button)
         self.menu_layout.addStretch()
 
         # Logo
@@ -210,6 +213,7 @@ class MainScreen(QWidget):
         self.log_button.clicked.connect(self.ac_log_ekrani)
         self.summary_button.clicked.connect(self.ac_aylik_ozet_ekrani)
         self.export_button.clicked.connect(self.export_to_excel)
+        self.calendar_button.clicked.connect(self.ac_takvim_ekrani)
 
         self.load_data()
 
@@ -276,6 +280,13 @@ class MainScreen(QWidget):
     def ac_aylik_ozet_ekrani(self):
         self.ozet_ekrani = MonthlySummaryScreen()
         self.ozet_ekrani.show()
+
+    def ac_takvim_ekrani(self):
+        self.calendar_screen = CalendarViewScreen(
+            self.giderler,
+            on_gider_eklendi_callback=self.load_data
+        )
+        self.calendar_screen.show()
 
     def export_to_excel(self):
         export_list = self.filtered_giderler if self.filtered_giderler else self.giderler
