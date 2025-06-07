@@ -99,3 +99,18 @@ def delete_gider(giderId):
         return False
     finally:
         conn.close()
+
+def gider_var_mi(aciklama, tarih):
+    conn = get_connection()
+    if not conn:
+        return False
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM Gider WHERE aciklama = ? AND tarih = ?", (aciklama, tarih))
+        result = cursor.fetchone()
+        return result[0] > 0
+    except:
+        return False
+    finally:
+        conn.close()

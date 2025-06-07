@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QCalendarWidget, QListWidget
 from PySide6.QtCore import QDate
 from PySide6.QtGui import QTextCharFormat, QBrush, QColor
 from gui.add_expense_screen import AddExpenseScreen
+from utils.logger import log_info
 
 class CalendarViewScreen(QWidget):
     def __init__(self, giderler, on_gider_eklendi_callback=None):
@@ -81,3 +82,4 @@ class CalendarViewScreen(QWidget):
         self.gunu_sec()
         if self.on_gider_eklendi_callback:
             self.on_gider_eklendi_callback()
+            log_info(f"Takvimden gider eklendi")

@@ -6,7 +6,7 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import Qt
 from gui.add_structure_screen import AddStructureScreen
 from gui.add_expense_screen import AddExpenseScreen
-from db.queries.gider_queries import get_all_giderler, delete_gider
+from db.queries.gider_queries import get_all_giderler, delete_gider, gider_var_mi
 from gui.edit_expense_screen import EditExpenseScreen
 from utils.logger import log_info, log_error
 from gui.log_viewer_screen import LogViewerScreen
@@ -344,13 +344,15 @@ class MainScreen(QWidget):
         try:
             df = pd.read_excel(file_path)
 
-            # Gerekli lookup tablolarını al
+            # Tüm lookup'ları al
             odeme_lookup = {x.ad: x.odemeTuruId for x in get_odeme_turleri()}
             kalem_lookup = {x.ad: x.butceKalemiId for x in get_butce_kalemleri()}
             hesap_lookup = {x.ad: x.hesapAdiId for x in get_hesap_adlari()}
 
             eklenen = 0
-            for _, row in df.iterrows():
+            gecersiz_satirlar = []
+
+            for i, row in df.iterrows():
                 odeme_id = odeme_lookup.get(str(row["ödeme türü"]).strip())
                 kalem_id = kalem_lookup.get(str(row["bütçe kalemi"]).strip())
                 hesap_id = hesap_lookup.get(str(row["hesap adı"]).strip())
@@ -358,16 +360,35 @@ class MainScreen(QWidget):
                 tarih = str(pd.to_datetime(row["tarih"]).date())
                 tutar = float(row["tutar"])
 
-                if None in (odeme_id, kalem_id, hesap_id):
-                    continue  # geçersiz eşleşme
+                nedenler = []
+                if odeme_id is None:
+                    nedenler.append("Ödeme türü eşleşmedi")
+                if kalem_id is None:
+                    nedenler.append("Bütçe kalemi eşleşmedi")
+                if hesap_id is None:
+                    nedenler.append("Hesap adı eşleşmedi")
+
+                if nedenler:
+                    gecersiz_satirlar.append(f"Satır {i + 2}: {', '.join(nedenler)}")
+                    continue
+                if gider_var_mi(aciklama, tarih):
+                    gecersiz_satirlar.append(f"Satır {i + 2}: Aynı açıklama ve tarihte gider zaten var")
+                    continue
 
                 if add_gider(odeme_id, kalem_id, hesap_id, aciklama, tarih, tutar):
                     eklenen += 1
 
-            QMessageBox.information(self, "Başarılı", f"{eklenen} gider başarıyla eklendi.")
+            msg = f"{eklenen} gider başarıyla eklendi."
+            log_info("Import Islemi Basarili")
+            if gecersiz_satirlar:
+                detay = "\n".join(gecersiz_satirlar)
+                msg += f"\n\nAşağıdaki satırlar eklenmedi:\n{detay}"
+
+            QMessageBox.information(self, "Excel Aktarımı Tamamlandı", msg)
             self.load_data()
 
         except Exception as e:
+
             QMessageBox.critical(self, "Hata", f"Dosya okunamadı veya işlem yapılamadı.\n\n{str(e)}")
 
     def ac_duzenleme_ekrani(self):
