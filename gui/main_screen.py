@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
     QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel,
-    QMessageBox, QTableWidget, QTableWidgetItem
+    QMessageBox, QTableWidget, QTableWidgetItem,QGroupBox
 )
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import Qt
@@ -24,8 +24,6 @@ from db.queries.odeme_queries import (
     get_butce_kalemleri,
     get_hesap_adlari
 )
-
-
 import os
 
 class MainScreen(QWidget):
@@ -102,7 +100,7 @@ class MainScreen(QWidget):
         logo_label = QLabel()
         logo_pixmap = QPixmap("assets/icon.png")
         if not logo_pixmap.isNull():
-            logo_label.setPixmap(logo_pixmap.scaledToWidth(80, Qt.SmoothTransformation))
+            logo_label.setPixmap(logo_pixmap.scaledToWidth(90, Qt.SmoothTransformation))
         logo_label.setAlignment(Qt.AlignCenter)
         self.menu_layout.addWidget(logo_label)
 
@@ -168,8 +166,6 @@ class MainScreen(QWidget):
             user_info_label.setStyleSheet("color: gray; font-weight: bold; font-size: 14px;")
 
         # Ekrana ekle
-
-
         right_panel = QWidget()
         right_layout = QVBoxLayout()
         right_layout.setContentsMargins(10, 10, 10, 10)
@@ -179,12 +175,20 @@ class MainScreen(QWidget):
         right_layout.addWidget(QLabel("Gider Listesi"))
 
         # Filtre Alanları
+
         filter_layout = QHBoxLayout()
 
+
+
+        placeholder_date = QDate(2000, 1, 1)
         self.start_date = QDateEdit()
         self.start_date.setCalendarPopup(True)
         self.start_date.setDisplayFormat("yyyy-MM-dd")
-        self.start_date.setDate(QDate.currentDate().addMonths(-1))  # Varsayılan: bir ay geriden başla
+        self.start_date.setDate(placeholder_date)
+        self.start_date.setSpecialValueText(" ")
+        self.start_date.setMinimumDate(QDate.currentDate().addMonths(-1))
+        self.start_date.clear()
+
         filter_layout.addWidget(QLabel("Başlangıç Tarihi:"))
         filter_layout.addWidget(self.start_date)
 

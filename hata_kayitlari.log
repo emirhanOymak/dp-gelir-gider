@@ -92,3 +92,39 @@
 2025-06-07 13:04:06,699 - INFO - Import Islemi Basarili
 2025-06-07 13:05:53,874 - INFO - Import Islemi Basarili
 2025-06-07 13:17:10,265 - INFO - generated new fontManager
+2025-06-13 14:27:47,658 - INFO - generated new fontManager
+2025-06-13 14:27:52,021 - WARNING - Giris basarisiz - Kullanici: 
+2025-06-13 14:42:41,949 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 14:43:07,146 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-13 14:43:07,147 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-13 14:44:32,683 - INFO - Giris basarili - Kullanici: admin_user
+2025-06-13 14:47:13,308 - WARNING - Giris basarisiz - Kullanici: normal_user
+2025-06-13 14:47:20,172 - WARNING - Giris basarisiz - Kullanici: normal_user
+2025-06-13 14:47:31,527 - INFO - Giris basarili - Kullanici: viewer_user
+2025-06-13 14:50:05,748 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:01:43,329 - WARNING - Giris basarisiz - Kullanici: admin
+2025-06-13 15:14:43,464 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:19:05,210 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:29:41,740 - WARNING - Giris basarisiz - Kullanici: 
+2025-06-13 15:29:54,983 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:31:37,719 - WARNING - Giris basarisiz - Kullanici: admin
+2025-06-13 15:31:51,571 - WARNING - Giris basarisiz - Kullanici: admin
+2025-06-13 15:31:53,105 - WARNING - Giris basarisiz - Kullanici: admin
+2025-06-13 15:38:05,189 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:39:47,740 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:49:02,909 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:53:24,324 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:54:36,375 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:55:15,986 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:56:34,637 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:58:36,229 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 15:59:16,313 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:00:31,644 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:00:59,717 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:01:22,766 - INFO - Gider eklendi - Odeme Turu ID: 5, Kalem ID: 5, Hesap ID: 5, Tutar: 799.0, Tarih: 2020-06-13, Aciklama: ghghghgh
+2025-06-13 16:01:36,887 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:09:10,523 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:11:16,586 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:11:32,823 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:13:29,246 - INFO - Giris basarili - Kullanici: admin
+2025-06-13 16:13:45,530 - INFO - Giris basarili - Kullanici: admin
