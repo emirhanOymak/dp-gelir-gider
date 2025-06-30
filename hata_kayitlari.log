@@ -92,3 +92,60 @@
 2025-06-07 13:04:06,699 - INFO - Import Islemi Basarili
 2025-06-07 13:05:53,874 - INFO - Import Islemi Basarili
 2025-06-07 13:17:10,265 - INFO - generated new fontManager
+2025-06-13 16:54:55,395 - WARNING - Giris basarisiz - Kullanici: admin1
+2025-06-13 16:55:27,575 - INFO - Giris basarili - Kullanici: admin1
+2025-06-13 16:58:47,907 - INFO - Giris basarili - Kullanici: admin1
+2025-06-13 17:00:55,795 - INFO - Gider eklendi - Odeme Turu ID: 4, Kalem ID: 7, Hesap ID: 32, Tutar: 123123.0, Tarih: 2025-06-13, Aciklama: Bu Bir Denemedir
+2025-06-13 17:24:02,245 - INFO - Import Islemi Basarili
+2025-06-13 17:24:24,460 - INFO - Import Islemi Basarili
+2025-06-13 17:26:35,948 - INFO - Giris basarili - Kullanici: admin1
+2025-06-13 17:27:54,225 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-13 17:27:54,226 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-13 17:52:29,528 - INFO - Giris basarili - Kullanici: admin1
+2025-06-13 17:54:23,900 - INFO - Import Islemi Basarili
+2025-06-13 17:54:51,314 - INFO - Import Islemi Basarili
+2025-06-13 18:03:25,754 - WARNING - Giris basarisiz - Kullanici: amin1
+2025-06-13 18:03:31,421 - WARNING - Giris basarisiz - Kullanici: amin1
+2025-06-13 18:03:32,294 - WARNING - Giris basarisiz - Kullanici: amin1
+2025-06-13 18:03:35,637 - INFO - Giris basarili - Kullanici: admin1
+2025-06-13 18:04:02,668 - WARNING - Giris basarisiz - Kullanici: kullanýcý1
+2025-06-13 18:04:21,324 - INFO - Giris basarili - Kullanici: kullanici1
+2025-06-13 18:04:57,278 - INFO - Giris basarili - Kullanici: izleyici1
+2025-06-13 18:05:02,499 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-13 18:05:02,499 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-13 18:05:21,789 - WARNING - Giris basarisiz - Kullanici: admin123
+2025-06-13 18:05:22,547 - WARNING - Giris basarisiz - Kullanici: admin123
+2025-06-13 18:05:28,458 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 01:48:25,209 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 01:56:27,761 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 01:56:57,216 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:21:38,044 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:37:58,310 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:38:20,986 - INFO - Giris basarili - Kullanici: kullanici1
+2025-06-14 02:39:00,311 - INFO - Giris basarili - Kullanici: izleyici1
+2025-06-14 02:41:19,025 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:47:57,851 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:50:25,442 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:51:40,142 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:52:49,476 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:53:15,517 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 02:55:30,885 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:08:24,020 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:10:19,126 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:10:34,431 - INFO - Gider silindi - ID: 28
+2025-06-14 03:12:17,586 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:12:27,362 - INFO - Gider guncellendi - ID: 27, Yeni Tutar: 150.0, Tarih: 2024-06-19, Aciklama: Tesst222
+2025-06-14 03:12:35,306 - INFO - Gider guncellendi - ID: 27, Yeni Tutar: 150.0, Tarih: 2024-06-19, Aciklama: Tesst22222
+2025-06-14 03:13:56,211 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:19:54,385 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:20:05,568 - INFO - Gider guncellendi - ID: 25, Yeni Tutar: 150.0, Tarih: 2024-06-19, Aciklama: Tesst2222
+2025-06-14 03:20:19,061 - INFO - Gider guncellendi - ID: 25, Yeni Tutar: 150.0, Tarih: 2024-06-19, Aciklama: Tesst1312
+2025-06-14 03:22:59,825 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:24:22,112 - INFO - Gider guncellendi - ID: 20, Yeni Tutar: 8000.0, Tarih: 2025-06-07, Aciklama: TelsizTelsiz1312
+2025-06-14 03:24:41,082 - INFO - Gider guncellendi - ID: 23, Yeni Tutar: 6542.0, Tarih: 2025-06-22, Aciklama: TelsizTelkom1312
+2025-06-14 03:25:32,523 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:29:39,519 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:30:06,647 - INFO - Giris basarili - Kullanici: admin1
+2025-06-14 03:30:46,986 - INFO - Giris basarili - Kullanici: admin1
+2025-06-30 20:27:46,350 - INFO - Giris basarili - Kullanici: admin1
+2025-06-30 21:24:13,002 - INFO - Giris basarili - Kullanici: admin1

@@ -24,7 +24,10 @@ from db.queries.odeme_queries import (
     get_butce_kalemleri,
     get_hesap_adlari
 )
-
+from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QMenu
+from PySide6.QtGui import QAction
+from gui.edit_expense_screen import EditExpenseScreen
 
 import os
 
@@ -33,13 +36,14 @@ class MainScreen(QWidget):
         super().__init__()
         self.kullanici = kullanici
         self.setWindowTitle("DP Muhasebe Paneli")
-        self.setGeometry(400, 150, 1000, 600)
-        self.setFixedSize(self.width(), self.height())
+        self.resize(1280, 800)
+        self.move(300, 100)
         icon_path = os.path.join(os.path.dirname(__file__), "../assets/icon.png")
         self.setWindowIcon(QIcon(icon_path))
 
         self.selected_gider_id = None
         self.filtered_giderler = []
+
         self.init_ui()
 
     def init_ui(self):
@@ -70,15 +74,17 @@ class MainScreen(QWidget):
 
         # Rol bazlı buton kısıtlamaları
         if self.kullanici.rol == "kullanici":
-            self.delete_button.setEnabled(False)  # sadece admin silebilir
-            self.log_button.setEnabled(False)
+            self.delete_button.hide()
+            self.log_button.hide()
+            self.import_button.hide()
 
         if self.kullanici.rol == "izleyici":
-            self.expense_button.setEnabled(False)
-            self.create_button.setEnabled(False)
-            self.edit_button.setEnabled(False)
-            self.delete_button.setEnabled(False)
-            self.log_button.setEnabled(False)
+            self.expense_button.hide()
+            self.create_button.hide()
+            self.delete_button.hide()
+            self.log_button.hide()
+            self.export_button.hide()
+            self.import_button.hide()
 
         for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button]:
             btn.setCursor(Qt.PointingHandCursor)
@@ -93,8 +99,8 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.delete_button)
         self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addWidget(self.summary_button)
-        self.menu_layout.addWidget(self.export_button)
-        self.menu_layout.addWidget(self.import_button)
+        #self.menu_layout.addWidget(self.export_button)
+        #self.menu_layout.addWidget(self.import_button)
         self.menu_layout.addWidget(self.calendar_button)
         self.menu_layout.addStretch()
 
@@ -134,6 +140,11 @@ class MainScreen(QWidget):
 
         # ========== Sağ Panel: Tablo ==========
         self.table = QTableWidget()
+
+        #Yeni eklendi
+        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.table.customContextMenuRequested.connect(self.satir_menu_goster)
+
         self.table.setColumnCount(6)
         self.table.setHorizontalHeaderLabels([
             "Ödeme Türü", "Bütçe Kalemi", "Hesap Adı", "Açıklama", "Tarih", "Tutar"
@@ -208,6 +219,10 @@ class MainScreen(QWidget):
         self.reset_button.clicked.connect(self.load_data)
         filter_layout.addWidget(self.reset_button)
 
+        #Değiştirdim
+        filter_layout.addWidget(self.export_button)
+        filter_layout.addWidget(self.import_button)
+
         right_layout.addLayout(filter_layout)
 
         right_layout.addWidget(self.table)
@@ -232,7 +247,7 @@ class MainScreen(QWidget):
     def load_data(self, filtered=False):
         self.table.setRowCount(0)
         source = self.filtered_giderler if filtered else get_all_giderler()
-        self.giderler = source if not filtered else self.giderler  # Ana listeyi sadece ilk yüklemede güncelle
+        self.giderler = source  # HER ZAMAN güncellensin
 
         for row_idx, gider in enumerate(source):
             self.table.insertRow(row_idx)
@@ -258,6 +273,54 @@ class MainScreen(QWidget):
         self.selected_gider_id = self.giderler[row].giderId
         self.edit_button.setEnabled(True)
         self.delete_button.setEnabled(True)
+
+    def duzenle_satira_git(self):
+        if self.selected_gider_id:
+            gider = next((g for g in self.giderler if g.giderId == self.selected_gider_id), None)
+            if gider:
+                self.edit_expense_screen = EditExpenseScreen(gider, lambda: self.load_data(filtered=False))
+                self.edit_expense_screen.show()
+
+    from PySide6.QtWidgets import QMessageBox
+    from db.queries.gider_queries import delete_gider
+
+    def satir_menu_goster(self, position):
+        selected_row = self.table.indexAt(position).row()
+        if selected_row < 0:
+            return
+        self.on_row_selected(selected_row, 0)
+
+        menu = QMenu(self)
+        duzenle_action = QAction("Satırı Düzenle", self)
+        sil_action = QAction("Satırı Sil", self)
+        duzenle_action.triggered.connect(self.duzenle_satira_git)
+        sil_action.triggered.connect(self.satiri_sil)
+        menu.addAction(duzenle_action)
+        menu.addAction(sil_action)
+        menu.exec(self.table.viewport().mapToGlobal(position))
+
+    def satiri_sil(self):
+        if self.selected_gider_id is None:
+            return
+
+        confirm = QMessageBox.question(
+            self,
+            "Silme Onayı",
+            "Bu işlemi silmek istediğinize emin misiniz?"
+        )
+
+        if confirm == QMessageBox.Yes:
+            success = delete_gider(self.selected_gider_id)
+            if success:
+                log_info(f"Gider silindi - ID: {self.selected_gider_id}")
+                QMessageBox.information(self, "Başarılı", "Kayıt silindi.")
+                self.load_data()
+                self.selected_gider_id = None
+                self.edit_button.setEnabled(False)
+                self.delete_button.setEnabled(False)
+            else:
+                log_error("Gider silinemedi", f"ID: {self.selected_gider_id}")
+                QMessageBox.critical(self, "Hata", "Kayıt silinemedi.")
 
     def delete_selected(self):
         if self.selected_gider_id is None:

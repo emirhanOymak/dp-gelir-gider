@@ -4,6 +4,7 @@ from db.queries.kullanici_queries import check_user_credentials
 from models.kullanici import Kullanici
 from gui.main_screen import MainScreen
 from utils.logger import log_info, log_warning
+from gui.main_menu_screen import MainMenuScreen
 
 import os
 
@@ -51,7 +52,7 @@ class LoginScreen(QWidget):
             self.message_label.setStyleSheet("color: green; font-weight: bold;")
 
             self.hide()
-            self.main_screen = MainScreen(kullanici=kullanici)
+            self.main_screen = MainMenuScreen(kullanici)
             self.main_screen.show()
         else:
             log_warning(f"Giris basarisiz - Kullanici: {username}")  # ❌
