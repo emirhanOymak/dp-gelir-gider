@@ -28,6 +28,8 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QMenu
 from PySide6.QtGui import QAction
 from gui.edit_expense_screen import EditExpenseScreen
+from gui.pivot_gider_tablosu_screen import PivotGiderTablosuScreen
+
 
 import os
 
@@ -71,6 +73,8 @@ class MainScreen(QWidget):
         self.export_button = QPushButton("📤 Giderleri Excel’e Aktar")
         self.import_button = QPushButton("📥 Excel'den İçe Aktar")
         self.calendar_button = QPushButton("📅 Takvim Görünümüne Geç")
+        self.pivot_button = QPushButton("📊 Pivot Tablo")
+
 
         # Rol bazlı buton kısıtlamaları
         if self.kullanici.rol == "kullanici":
@@ -86,7 +90,7 @@ class MainScreen(QWidget):
             self.export_button.hide()
             self.import_button.hide()
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button,self.pivot_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -102,6 +106,7 @@ class MainScreen(QWidget):
         #self.menu_layout.addWidget(self.export_button)
         #self.menu_layout.addWidget(self.import_button)
         self.menu_layout.addWidget(self.calendar_button)
+        self.menu_layout.addWidget(self.pivot_button)
         self.menu_layout.addStretch()
 
         # Logo
@@ -218,6 +223,8 @@ class MainScreen(QWidget):
         self.reset_button = QPushButton("♻️ Tümünü Göster")
         self.reset_button.clicked.connect(self.load_data)
         filter_layout.addWidget(self.reset_button)
+
+        self.pivot_button.clicked.connect(self.ac_pivot_ekrani)
 
         #Değiştirdim
         filter_layout.addWidget(self.export_button)
@@ -461,3 +468,7 @@ class MainScreen(QWidget):
         if selected_gider:
             self.edit_screen = EditExpenseScreen(selected_gider, self.load_data)
             self.edit_screen.show()
+
+    def ac_pivot_ekrani(self):
+        self.pivot_screen = PivotGiderTablosuScreen(yil=2025, ay=1)  # İstediğin yıl/ay
+        self.pivot_screen.show()

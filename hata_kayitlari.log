@@ -149,3 +149,28 @@
 2025-06-14 03:30:46,986 - INFO - Giris basarili - Kullanici: admin1
 2025-06-30 20:27:46,350 - INFO - Giris basarili - Kullanici: admin1
 2025-06-30 21:24:13,002 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 02:09:35,570 - WARNING - Giris basarisiz - Kullanici: admin1
+2025-07-01 02:09:38,979 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 02:15:52,294 - INFO - Gider eklendi - Odeme Turu ID: 4, Kalem ID: 7, Hesap ID: 31, Tutar: 1312.0, Tarih: 2025-07-01, Aciklama: Bu bir Denemedir.
+2025-07-01 02:17:48,266 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-07-01 02:17:48,266 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-07-01 02:51:10,914 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 02:57:15,952 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:20:20,542 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:23:30,986 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:23:52,833 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:25:27,316 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:29:02,549 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 26, Hesap ID: 33, Tutar: 1000.0, Tarih: 2025-01-01, Aciklama: KASKO
+2025-07-01 03:29:35,532 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 26, Hesap ID: 34, Tutar: 2000.0, Tarih: 2025-01-02, Aciklama: BAKIM
+2025-07-01 03:29:51,661 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 26, Hesap ID: 35, Tutar: 3000.0, Tarih: 2025-01-03, Aciklama: HGS
+2025-07-01 03:35:14,791 - WARNING - Giris basarisiz - Kullanici: admin1
+2025-07-01 03:35:18,548 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:39:53,065 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 28, Hesap ID: 38, Tutar: 1002.0, Tarih: 2025-07-01, Aciklama: BI ANALYTICS
+2025-07-01 03:40:20,221 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 28, Hesap ID: 39, Tutar: 1312.0, Tarih: 2025-01-02, Aciklama: BI ANALYTICS
+2025-07-01 03:40:36,161 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 28, Hesap ID: 38, Tutar: 1312.0, Tarih: 2025-01-01, Aciklama: BI ANALYTICS
+2025-07-01 03:40:58,091 - INFO - Gider eklendi - Odeme Turu ID: 13, Kalem ID: 28, Hesap ID: 40, Tutar: 123.0, Tarih: 2025-07-03, Aciklama: BI ANALYTICS
+2025-07-01 03:44:01,248 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:46:15,814 - WARNING - Giris basarisiz - Kullanici: admin1
+2025-07-01 03:46:21,370 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:49:52,724 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:52:19,963 - INFO - Giris basarili - Kullanici: admin1
