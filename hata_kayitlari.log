@@ -174,3 +174,27 @@
 2025-07-01 03:46:21,370 - INFO - Giris basarili - Kullanici: admin1
 2025-07-01 03:49:52,724 - INFO - Giris basarili - Kullanici: admin1
 2025-07-01 03:52:19,963 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 03:57:42,273 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 21:54:36,996 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 21:55:18,562 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-07-01 21:55:18,562 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-07-02 12:35:05,797 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 18:06:53,261 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:13:20,396 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:15:22,254 - INFO - Gider eklendi - Odeme Turu ID: 14, Kalem ID: 34, Hesap ID: 43, Tutar: 5000.0, Tarih: 2025-01-01, Aciklama: Deneme Ödemesi 1
+2025-07-02 19:15:39,458 - INFO - Gider eklendi - Odeme Turu ID: 14, Kalem ID: 34, Hesap ID: 44, Tutar: 750.0, Tarih: 2025-01-01, Aciklama: Deneme
+2025-07-02 19:15:51,338 - INFO - Gider eklendi - Odeme Turu ID: 14, Kalem ID: 34, Hesap ID: 45, Tutar: 2222.0, Tarih: 2025-01-02, Aciklama: ss
+2025-07-02 19:16:05,807 - INFO - Gider eklendi - Odeme Turu ID: 14, Kalem ID: 35, Hesap ID: 46, Tutar: 2222.0, Tarih: 2025-01-03, Aciklama: deneme 2
+2025-07-02 19:16:17,961 - INFO - Gider eklendi - Odeme Turu ID: 14, Kalem ID: 35, Hesap ID: 47, Tutar: 2222.0, Tarih: 2025-01-02, Aciklama: ssss
+2025-07-02 19:26:19,399 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:28:49,114 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:30:20,688 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:31:56,698 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:33:57,839 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:34:38,462 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:40:39,783 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 19:41:42,435 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 20:12:16,931 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 20:46:53,785 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 20:49:01,705 - INFO - Giris basarili - Kullanici: admin1
+2025-07-02 20:51:21,008 - INFO - Giris basarili - Kullanici: admin1
