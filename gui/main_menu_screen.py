@@ -19,7 +19,6 @@ class MainMenuScreen(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
-
         hosgeldin = QLabel(f"👋 Hoş geldiniz, {self.kullanici.kullaniciAdi} ({self.kullanici.rol.upper()})")
         hosgeldin.setAlignment(Qt.AlignCenter)
         hosgeldin.setStyleSheet("font-size: 14px; font-weight: bold; margin-bottom: 20px;")

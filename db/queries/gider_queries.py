@@ -152,3 +152,26 @@ def gider_var_mi(aciklama, tarih):
         return False
     finally:
         conn.close()
+
+def get_gider_by_id(gider_id):
+    conn = get_connection()
+    if not conn:
+        return None
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT giderId, odemeTuruId, butceKalemiId, hesapAdiId, aciklama, tarih, tutar, kalanTutar, status, recursiveGiderId, toplamTutar, baslangicTarihi
+            FROM Gider
+            WHERE giderId = ?
+        """, (gider_id,))
+        row = cursor.fetchone()
+        if row:
+            return Gider(*row)
+        return None
+
+    except Exception as e:
+        print("DATABASE ERROR in get_gider_by_id:", e)
+        return None
+    finally:
+        conn.close()
