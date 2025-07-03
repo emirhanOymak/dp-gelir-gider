@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
     QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel,
-    QMessageBox, QTableWidget, QTableWidgetItem,QGroupBox
+    QMessageBox, QTableWidget, QTableWidgetItem
 )
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import Qt
@@ -24,6 +24,13 @@ from db.queries.odeme_queries import (
     get_butce_kalemleri,
     get_hesap_adlari
 )
+from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QMenu
+from PySide6.QtGui import QAction
+from gui.edit_expense_screen import EditExpenseScreen
+from gui.pivot_gider_tablosu_screen import PivotGiderTablosuScreen
+
+
 import os
 
 class MainScreen(QWidget):
@@ -31,13 +38,14 @@ class MainScreen(QWidget):
         super().__init__()
         self.kullanici = kullanici
         self.setWindowTitle("DP Muhasebe Paneli")
-        self.setGeometry(400, 150, 1000, 600)
-        self.setFixedSize(self.width(), self.height())
+        self.resize(1280, 800)
+        self.move(300, 100)
         icon_path = os.path.join(os.path.dirname(__file__), "../assets/icon.png")
         self.setWindowIcon(QIcon(icon_path))
 
         self.selected_gider_id = None
         self.filtered_giderler = []
+
         self.init_ui()
 
     def init_ui(self):
@@ -65,20 +73,24 @@ class MainScreen(QWidget):
         self.export_button = QPushButton("📤 Giderleri Excel’e Aktar")
         self.import_button = QPushButton("📥 Excel'den İçe Aktar")
         self.calendar_button = QPushButton("📅 Takvim Görünümüne Geç")
+        self.pivot_button = QPushButton("📊 Pivot Tablo")
+
 
         # Rol bazlı buton kısıtlamaları
         if self.kullanici.rol == "kullanici":
-            self.delete_button.setEnabled(False)  # sadece admin silebilir
-            self.log_button.setEnabled(False)
+            self.delete_button.hide()
+            self.log_button.hide()
+            self.import_button.hide()
 
         if self.kullanici.rol == "izleyici":
-            self.expense_button.setEnabled(False)
-            self.create_button.setEnabled(False)
-            self.edit_button.setEnabled(False)
-            self.delete_button.setEnabled(False)
-            self.log_button.setEnabled(False)
+            self.expense_button.hide()
+            self.create_button.hide()
+            self.delete_button.hide()
+            self.log_button.hide()
+            self.export_button.hide()
+            self.import_button.hide()
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button,self.pivot_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -91,16 +103,17 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.delete_button)
         self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addWidget(self.summary_button)
-        self.menu_layout.addWidget(self.export_button)
-        self.menu_layout.addWidget(self.import_button)
+        #self.menu_layout.addWidget(self.export_button)
+        #self.menu_layout.addWidget(self.import_button)
         self.menu_layout.addWidget(self.calendar_button)
+        self.menu_layout.addWidget(self.pivot_button)
         self.menu_layout.addStretch()
 
         # Logo
         logo_label = QLabel()
         logo_pixmap = QPixmap("assets/icon.png")
         if not logo_pixmap.isNull():
-            logo_label.setPixmap(logo_pixmap.scaledToWidth(90, Qt.SmoothTransformation))
+            logo_label.setPixmap(logo_pixmap.scaledToWidth(80, Qt.SmoothTransformation))
         logo_label.setAlignment(Qt.AlignCenter)
         self.menu_layout.addWidget(logo_label)
 
@@ -132,6 +145,11 @@ class MainScreen(QWidget):
 
         # ========== Sağ Panel: Tablo ==========
         self.table = QTableWidget()
+
+        #Yeni eklendi
+        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.table.customContextMenuRequested.connect(self.satir_menu_goster)
+
         self.table.setColumnCount(6)
         self.table.setHorizontalHeaderLabels([
             "Ödeme Türü", "Bütçe Kalemi", "Hesap Adı", "Açıklama", "Tarih", "Tutar"
@@ -166,6 +184,8 @@ class MainScreen(QWidget):
             user_info_label.setStyleSheet("color: gray; font-weight: bold; font-size: 14px;")
 
         # Ekrana ekle
+
+
         right_panel = QWidget()
         right_layout = QVBoxLayout()
         right_layout.setContentsMargins(10, 10, 10, 10)
@@ -175,20 +195,12 @@ class MainScreen(QWidget):
         right_layout.addWidget(QLabel("Gider Listesi"))
 
         # Filtre Alanları
-
         filter_layout = QHBoxLayout()
 
-
-
-        placeholder_date = QDate(2000, 1, 1)
         self.start_date = QDateEdit()
         self.start_date.setCalendarPopup(True)
         self.start_date.setDisplayFormat("yyyy-MM-dd")
-        self.start_date.setDate(placeholder_date)
-        self.start_date.setSpecialValueText(" ")
-        self.start_date.setMinimumDate(QDate.currentDate().addMonths(-1))
-        self.start_date.clear()
-
+        self.start_date.setDate(QDate.currentDate().addMonths(-1))  # Varsayılan: bir ay geriden başla
         filter_layout.addWidget(QLabel("Başlangıç Tarihi:"))
         filter_layout.addWidget(self.start_date)
 
@@ -211,6 +223,12 @@ class MainScreen(QWidget):
         self.reset_button = QPushButton("♻️ Tümünü Göster")
         self.reset_button.clicked.connect(self.load_data)
         filter_layout.addWidget(self.reset_button)
+
+        self.pivot_button.clicked.connect(self.ac_pivot_ekrani)
+
+        #Değiştirdim
+        filter_layout.addWidget(self.export_button)
+        filter_layout.addWidget(self.import_button)
 
         right_layout.addLayout(filter_layout)
 
@@ -236,7 +254,7 @@ class MainScreen(QWidget):
     def load_data(self, filtered=False):
         self.table.setRowCount(0)
         source = self.filtered_giderler if filtered else get_all_giderler()
-        self.giderler = source if not filtered else self.giderler  # Ana listeyi sadece ilk yüklemede güncelle
+        self.giderler = source  # HER ZAMAN güncellensin
 
         for row_idx, gider in enumerate(source):
             self.table.insertRow(row_idx)
@@ -262,6 +280,54 @@ class MainScreen(QWidget):
         self.selected_gider_id = self.giderler[row].giderId
         self.edit_button.setEnabled(True)
         self.delete_button.setEnabled(True)
+
+    def duzenle_satira_git(self):
+        if self.selected_gider_id:
+            gider = next((g for g in self.giderler if g.giderId == self.selected_gider_id), None)
+            if gider:
+                self.edit_expense_screen = EditExpenseScreen(gider, lambda: self.load_data(filtered=False))
+                self.edit_expense_screen.show()
+
+    from PySide6.QtWidgets import QMessageBox
+    from db.queries.gider_queries import delete_gider
+
+    def satir_menu_goster(self, position):
+        selected_row = self.table.indexAt(position).row()
+        if selected_row < 0:
+            return
+        self.on_row_selected(selected_row, 0)
+
+        menu = QMenu(self)
+        duzenle_action = QAction("Satırı Düzenle", self)
+        sil_action = QAction("Satırı Sil", self)
+        duzenle_action.triggered.connect(self.duzenle_satira_git)
+        sil_action.triggered.connect(self.satiri_sil)
+        menu.addAction(duzenle_action)
+        menu.addAction(sil_action)
+        menu.exec(self.table.viewport().mapToGlobal(position))
+
+    def satiri_sil(self):
+        if self.selected_gider_id is None:
+            return
+
+        confirm = QMessageBox.question(
+            self,
+            "Silme Onayı",
+            "Bu işlemi silmek istediğinize emin misiniz?"
+        )
+
+        if confirm == QMessageBox.Yes:
+            success = delete_gider(self.selected_gider_id)
+            if success:
+                log_info(f"Gider silindi - ID: {self.selected_gider_id}")
+                QMessageBox.information(self, "Başarılı", "Kayıt silindi.")
+                self.load_data()
+                self.selected_gider_id = None
+                self.edit_button.setEnabled(False)
+                self.delete_button.setEnabled(False)
+            else:
+                log_error("Gider silinemedi", f"ID: {self.selected_gider_id}")
+                QMessageBox.critical(self, "Hata", "Kayıt silinemedi.")
 
     def delete_selected(self):
         if self.selected_gider_id is None:
@@ -402,3 +468,7 @@ class MainScreen(QWidget):
         if selected_gider:
             self.edit_screen = EditExpenseScreen(selected_gider, self.load_data)
             self.edit_screen.show()
+
+    def ac_pivot_ekrani(self):
+        self.pivot_screen = PivotGiderTablosuScreen(yil=2025, ay=1)  # İstediğin yıl/ay
+        self.pivot_screen.show()
