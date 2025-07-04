@@ -82,7 +82,7 @@
 2025-06-07 04:10:10,360 - INFO - Giris basarili - Kullanici: admin1
 2025-06-07 04:10:38,117 - INFO - Import Islemi Basarili
 2025-06-07 12:39:53,060 - INFO - Giris basarili - Kullanici: admin1
-2025-06-07 12:41:28,534 - WARNING - Giris basarisiz - Kullanici: kullanýcý1
+2025-06-07 12:41:28,534 - WARNING - Giris basarisiz - Kullanici: kullanï¿½cï¿½1
 2025-06-07 12:41:42,750 - INFO - Giris basarili - Kullanici: kullanici1
 2025-06-07 12:43:33,254 - INFO - Giris basarili - Kullanici: izleyici1
 2025-06-07 12:44:10,054 - INFO - Giris basarili - Kullanici: admin1
@@ -108,7 +108,7 @@
 2025-06-13 18:03:31,421 - WARNING - Giris basarisiz - Kullanici: amin1
 2025-06-13 18:03:32,294 - WARNING - Giris basarisiz - Kullanici: amin1
 2025-06-13 18:03:35,637 - INFO - Giris basarili - Kullanici: admin1
-2025-06-13 18:04:02,668 - WARNING - Giris basarisiz - Kullanici: kullanýcý1
+2025-06-13 18:04:02,668 - WARNING - Giris basarisiz - Kullanici: kullanï¿½cï¿½1
 2025-06-13 18:04:21,324 - INFO - Giris basarili - Kullanici: kullanici1
 2025-06-13 18:04:57,278 - INFO - Giris basarili - Kullanici: izleyici1
 2025-06-13 18:05:02,499 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
@@ -174,3 +174,65 @@
 2025-07-01 03:46:21,370 - INFO - Giris basarili - Kullanici: admin1
 2025-07-01 03:49:52,724 - INFO - Giris basarili - Kullanici: admin1
 2025-07-01 03:52:19,963 - INFO - Giris basarili - Kullanici: admin1
+2025-07-01 13:20:11,019 - INFO - Giris basarili - Kullanici: admin
+2025-07-02 11:40:19,569 - INFO - Giris basarili - Kullanici: admin
+2025-07-02 11:45:48,447 - INFO - Giris basarili - Kullanici: admin
+2025-07-02 11:47:54,547 - INFO - Giris basarili - Kullanici: admin
+2025-07-02 11:51:47,284 - INFO - Giris basarili - Kullanici: admin
+2025-07-02 12:07:12,064 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 19:58:48,626 - INFO - generated new fontManager
+2025-07-03 19:59:45,339 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 20:03:07,260 - WARNING - Giris basarisiz - Kullanici: 
+2025-07-03 20:03:07,912 - WARNING - Giris basarisiz - Kullanici: 
+2025-07-03 22:41:46,119 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 22:44:25,592 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 22:46:33,514 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 22:48:28,099 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 22:58:19,557 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:00:36,475 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:01:50,999 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:03:19,282 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:03:31,032 - ERROR - Gider eklenemedi: Veritaban\u0131 hatas\u0131
+2025-07-03 23:05:39,028 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:17:12,257 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:18:05,406 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:19:15,172 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:20:17,942 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:26:22,445 - INFO - Giris basarili - Kullanici: admin
+2025-07-03 23:28:17,223 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:10:02,691 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:11:48,510 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:14:47,147 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:18:20,088 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:19:11,697 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:25:06,242 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:26:32,101 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:27:50,414 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:28:40,706 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:29:07,549 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:30:13,793 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:31:05,542 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:32:39,375 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:33:58,373 - WARNING - Giris basarisiz - Kullanici: admin
+2025-07-04 00:33:59,852 - WARNING - Giris basarisiz - Kullanici: admin
+2025-07-04 00:34:02,542 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:34:46,731 - INFO - Giris basarili - Kullanici: normal_user
+2025-07-04 00:36:42,917 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:38:43,765 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:49:26,064 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:54:02,591 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:56:11,958 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:57:16,867 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:58:25,880 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 00:59:33,646 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:04:09,323 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:15:13,747 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:21:01,284 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:22:22,974 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:24:23,484 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:25:52,573 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:28:10,092 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:29:51,632 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:33:26,141 - INFO - Giris basarili - Kullanici: admin
+2025-07-04 01:40:22,244 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-07-04 01:40:22,244 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.

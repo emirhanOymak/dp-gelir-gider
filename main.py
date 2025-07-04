@@ -5,6 +5,7 @@ from db.connection import get_connection
 
 def test_db_connection():
     conn = get_connection()
+    print("hello from wsl")
     if conn:
         print("✅ Veritabanı bağlantısı başarılı!")
         cursor = conn.cursor()

@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel,
+    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QComboBox,
     QMessageBox, QTableWidget, QTableWidgetItem
 )
-from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtGui import QIcon, QPixmap, QColor, QFont
 from PySide6.QtCore import Qt
 from gui.add_structure_screen import AddStructureScreen
 from gui.add_expense_screen import AddExpenseScreen
@@ -24,7 +24,7 @@ from db.queries.odeme_queries import (
     get_butce_kalemleri,
     get_hesap_adlari
 )
-from PySide6.QtWidgets import QApplication
+from gui.odeme_input_screen import OdemeInputScreen
 from PySide6.QtWidgets import QMenu
 from PySide6.QtGui import QAction
 from gui.edit_expense_screen import EditExpenseScreen
@@ -146,13 +146,16 @@ class MainScreen(QWidget):
         # ========== Sağ Panel: Tablo ==========
         self.table = QTableWidget()
 
-        #Yeni eklendi
+        self.table.verticalHeader().setDefaultSectionSize(40)
+        font = QFont()
+        font.setPointSize(11)
+        self.table.setFont(font)
         self.table.setContextMenuPolicy(Qt.CustomContextMenu)
         self.table.customContextMenuRequested.connect(self.satir_menu_goster)
 
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(8)
         self.table.setHorizontalHeaderLabels([
-            "Ödeme Türü", "Bütçe Kalemi", "Hesap Adı", "Açıklama", "Tarih", "Tutar"
+            "Ödeme Türü", "Bütçe Kalemi", "Hesap Adı", "Açıklama", "Tarih", "Tutar", "Durum", "Ödeme"
         ])
         self.table.setAlternatingRowColors(True)
         self.table.setSelectionBehavior(QTableWidget.SelectRows)
@@ -197,16 +200,25 @@ class MainScreen(QWidget):
         # Filtre Alanları
         filter_layout = QHBoxLayout()
 
+        self.status_cb = QComboBox()
+        self.status_cb.addItem("Tümü", None)
+        self.status_cb.addItem("Ödenmedi", 0)
+        self.status_cb.addItem("Ödendi", 1)
+        self.status_cb.addItem("Eksik Ödendi", 2)
+        self.status_cb.addItem("Fazla Ödendi", 3)
+        filter_layout.addWidget(QLabel("Durum:"))
+        filter_layout.addWidget(self.status_cb)
+
         self.start_date = QDateEdit()
         self.start_date.setCalendarPopup(True)
-        self.start_date.setDisplayFormat("yyyy-MM-dd")
+        self.start_date.setDisplayFormat("dd-MM-yyyy")
         self.start_date.setDate(QDate.currentDate().addMonths(-1))  # Varsayılan: bir ay geriden başla
         filter_layout.addWidget(QLabel("Başlangıç Tarihi:"))
         filter_layout.addWidget(self.start_date)
 
         self.end_date = QDateEdit()
         self.end_date.setCalendarPopup(True)
-        self.end_date.setDisplayFormat("yyyy-MM-dd")
+        self.end_date.setDisplayFormat("dd-MM-yyyy")
         self.end_date.setDate(QDate.currentDate())
         filter_layout.addWidget(QLabel("Bitiş Tarihi:"))
         filter_layout.addWidget(self.end_date)
@@ -226,7 +238,6 @@ class MainScreen(QWidget):
 
         self.pivot_button.clicked.connect(self.ac_pivot_ekrani)
 
-        #Değiştirdim
         filter_layout.addWidget(self.export_button)
         filter_layout.addWidget(self.import_button)
 
@@ -255,25 +266,69 @@ class MainScreen(QWidget):
         self.table.setRowCount(0)
         source = self.filtered_giderler if filtered else get_all_giderler()
         self.giderler = source  # HER ZAMAN güncellensin
+        status_map = {0: "Ödenmedi", 1: "Ödendi", 2: "Eksik", 3: "Fazla"}
 
         for row_idx, gider in enumerate(source):
+            status_text = status_map.get(gider.status, "Bilinmiyor")
             self.table.insertRow(row_idx)
+
             self.table.setItem(row_idx, 0, QTableWidgetItem(gider.odemeTuru))
             self.table.setItem(row_idx, 1, QTableWidgetItem(gider.butceKalemi))
             self.table.setItem(row_idx, 2, QTableWidgetItem(gider.hesapAdi))
             self.table.setItem(row_idx, 3, QTableWidgetItem(gider.aciklama))
             self.table.setItem(row_idx, 4, QTableWidgetItem(gider.tarih.strftime("%Y-%m-%d")))
             self.table.setItem(row_idx, 5, QTableWidgetItem(f"{gider.tutar:.2f}"))
+            self.table.setItem(row_idx, 6, QTableWidgetItem(status_text))
+
+            # Ödeme Gir Butonu
+            odeme_btn = QPushButton("💰")
+            odeme_btn.setFixedWidth(50)
+            odeme_btn.clicked.connect(lambda _, g=gider: self.odeme_gir(g))
+            self.table.setCellWidget(row_idx, 7, odeme_btn)
+
+
+            # Status'a göre renk
+            if gider.status == 0:
+                color = QColor("#ffe5e5")  #  kırmızı
+            elif gider.status == 2:
+                color = QColor("#fff8dc")  #  sarı
+            elif gider.status == 3:
+                color = QColor("#e6ffe6")  #  yeşil
+            else:
+                color = QColor("white")  #  beyaz
+
+            for col in range(self.table.columnCount()):
+                item = self.table.item(row_idx, col)
+                if item:
+                    item.setBackground(color)
+                    item.setForeground(QColor("black"))  # FONT RENGİ SİYAH
 
     def apply_filters(self):
         start_date = self.start_date.date().toPython()
         end_date = self.end_date.date().toPython()
-        search_text = self.aciklama_input.text().lower()
+        search_text = (self.aciklama_input.text() or "").strip().lower()
+        selected_index = self.status_cb.currentIndex()
+        selected_status = self.status_cb.currentData()
+
+        def date_filter(gider):
+            if not gider.tarih:
+                return False
+            tarih_date = gider.tarih.date() if hasattr(gider.tarih, 'date') else gider.tarih
+            return start_date <= tarih_date <= end_date
+
+        def status_filter(gider):
+            if selected_index == 0:  # Tümü
+                return True
+            return gider.status == selected_status
+
+        def aciklama_filter(gider):
+            return search_text in (gider.aciklama or "").lower()
 
         self.filtered_giderler = [
             gider for gider in self.giderler
-            if start_date <= gider.tarih <= end_date and search_text in gider.aciklama.lower()
+            if date_filter(gider) and status_filter(gider) and aciklama_filter(gider)
         ]
+
         self.load_data(filtered=True)
 
     def on_row_selected(self, row, _column):
@@ -288,8 +343,6 @@ class MainScreen(QWidget):
                 self.edit_expense_screen = EditExpenseScreen(gider, lambda: self.load_data(filtered=False))
                 self.edit_expense_screen.show()
 
-    from PySide6.QtWidgets import QMessageBox
-    from db.queries.gider_queries import delete_gider
 
     def satir_menu_goster(self, position):
         selected_row = self.table.indexAt(position).row()
@@ -472,3 +525,9 @@ class MainScreen(QWidget):
     def ac_pivot_ekrani(self):
         self.pivot_screen = PivotGiderTablosuScreen(yil=2025, ay=1)  # İstediğin yıl/ay
         self.pivot_screen.show()
+
+    def odeme_gir(self, gider):
+        self.odeme_screen = OdemeInputScreen(gider, self.load_data)
+        self.odeme_screen.show()
+
+

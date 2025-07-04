@@ -24,23 +24,29 @@ class AddStructureScreen(QWidget):
         # Ödeme Türü
         layout.addWidget(QLabel("Ödeme Türü:"))
         self.odeme_cb = QComboBox()
-        self.btn_add_odeme = QPushButton("➕ Yeni Ödeme Türü")
+        self.btn_add_odeme = QPushButton("➕")
         self.btn_add_odeme.clicked.connect(lambda: self.popup_yeni_kayit("odeme"))
-        layout.addLayout(self._row(self.odeme_cb, self.btn_add_odeme))
+        self.btn_edit_odeme = QPushButton("✏️ ")
+        self.btn_edit_odeme.clicked.connect(lambda: self.popup_duzenle_kayit("odeme"))
+        layout.addLayout(self._row(self.odeme_cb, self.btn_add_odeme, self.btn_edit_odeme))
 
         # Bütçe Kalemi
         layout.addWidget(QLabel("Bütçe Kalemi:"))
         self.kalem_cb = QComboBox()
-        self.btn_add_kalem = QPushButton("➕ Yeni Kalem")
+        self.btn_add_kalem = QPushButton("➕")
         self.btn_add_kalem.clicked.connect(lambda: self.popup_yeni_kayit("kalem"))
-        layout.addLayout(self._row(self.kalem_cb, self.btn_add_kalem))
+        self.btn_edit_kalem = QPushButton("✏️ ")
+        self.btn_edit_kalem.clicked.connect(lambda: self.popup_duzenle_kayit("kalem"))
+        layout.addLayout(self._row(self.kalem_cb, self.btn_add_kalem, self.btn_edit_kalem))
 
         # Hesap Adı
         layout.addWidget(QLabel("Hesap Adı:"))
         self.hesap_cb = QComboBox()
-        self.btn_add_hesap = QPushButton("➕ Yeni Hesap")
+        self.btn_add_hesap = QPushButton("➕")
         self.btn_add_hesap.clicked.connect(lambda: self.popup_yeni_kayit("hesap"))
-        layout.addLayout(self._row(self.hesap_cb, self.btn_add_hesap))
+        self.btn_edit_hesap = QPushButton("✏️ ")
+        self.btn_edit_hesap.clicked.connect(lambda: self.popup_duzenle_kayit("hesap"))
+        layout.addLayout(self._row(self.hesap_cb, self.btn_add_hesap, self.btn_edit_hesap))
 
         # Kapat Butonu
         self.close_button = QPushButton("✅ Tamamla ve Kapat")
@@ -49,17 +55,29 @@ class AddStructureScreen(QWidget):
 
         self.setLayout(layout)
 
+        #Buton width
+        self.btn_add_odeme.setFixedWidth(40)
+        self.btn_edit_odeme.setFixedWidth(40)
+
+        self.btn_add_kalem.setFixedWidth(40)
+        self.btn_edit_kalem.setFixedWidth(40)
+
+        self.btn_add_hesap.setFixedWidth(40)
+        self.btn_edit_hesap.setFixedWidth(40)
+
         # Etkileşim
         self.odeme_cb.currentIndexChanged.connect(self.load_kalemler)
         self.kalem_cb.currentIndexChanged.connect(self.load_hesaplar)
 
         self.load_odeme_turleri()
 
-    def _row(self, combo, button):
+    def _row(self, combo, button, edit_button=None):
         row = QHBoxLayout()
-        combo.setMinimumWidth(250)
+        combo.setMinimumWidth(100)
         row.addWidget(combo)
         row.addWidget(button)
+        if edit_button:
+            row.addWidget(edit_button)
         return row
 
     def load_odeme_turleri(self):
@@ -86,6 +104,52 @@ class AddStructureScreen(QWidget):
         hesaplar = get_hesap_adlari_by_kalem_id(kalem_id)
         for item in hesaplar:
             self.hesap_cb.addItem(item.ad, item.hesapAdiId)
+
+    def popup_duzenle_kayit(self, tur):
+        dialog = QDialog(self)
+        dialog.setWindowTitle(f"{tur.capitalize()} Düzenle")
+        dialog.setFixedSize(300, 120)
+        layout = QVBoxLayout()
+
+        # Mevcut isim
+        combo = getattr(self, f"{tur}_cb")
+        mevcut_id = combo.currentData()
+        mevcut_text = combo.currentText()
+        if not mevcut_id:
+            QMessageBox.warning(self, "Seçim Yok", f"Önce bir {tur} seçin.")
+            return
+
+        input_field = QLineEdit()
+        input_field.setText(mevcut_text)
+        layout.addWidget(input_field)
+
+        btn_ok = QPushButton("Kaydet")
+        layout.addWidget(btn_ok)
+        dialog.setLayout(layout)
+
+        def guncelle():
+            yeni_text = input_field.text().strip()
+            if not yeni_text:
+                QMessageBox.warning(self, "Uyarı", "Boş değer girilemez.")
+                return
+
+            if tur == "odeme":
+                from db.queries.structure_queries import update_odeme_turu
+                update_odeme_turu(mevcut_id, yeni_text)
+                self.load_odeme_turleri()
+            elif tur == "kalem":
+                from db.queries.structure_queries import update_butce_kalemi
+                update_butce_kalemi(mevcut_id, yeni_text)
+                self.load_kalemler(self.odeme_cb.currentIndex())
+            elif tur == "hesap":
+                from db.queries.structure_queries import update_hesap_adi
+                update_hesap_adi(mevcut_id, yeni_text)
+                self.load_hesaplar(self.kalem_cb.currentIndex())
+
+            dialog.accept()
+
+        btn_ok.clicked.connect(guncelle)
+        dialog.exec()
 
     def popup_yeni_kayit(self, tur):
         dialog = QDialog(self)
