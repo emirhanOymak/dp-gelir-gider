@@ -54,7 +54,7 @@ class MainScreen(QWidget):
         main_layout.setSpacing(0)
         self.setLayout(main_layout)
 
-        # ========== Sol Menü ==========
+        # ========== Sol Menü ==========        
         self.menu_layout = QVBoxLayout()
         self.menu_layout.setContentsMargins(0, 0, 0, 0)
         self.menu_layout.setSpacing(15)
@@ -75,7 +75,6 @@ class MainScreen(QWidget):
         self.calendar_button = QPushButton("📅 Takvim Görünümüne Geç")
         self.pivot_button = QPushButton("📊 Pivot Tablo")
 
-
         # Rol bazlı buton kısıtlamaları
         if self.kullanici.rol == "kullanici":
             self.delete_button.hide()
@@ -90,7 +89,7 @@ class MainScreen(QWidget):
             self.export_button.hide()
             self.import_button.hide()
 
-        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button,self.log_button, self.summary_button,self.export_button,self.import_button,self.calendar_button,self.pivot_button]:
+        for btn in [self.create_button, self.expense_button, self.edit_button, self.delete_button, self.log_button, self.summary_button, self.export_button, self.import_button, self.calendar_button, self.pivot_button]:
             btn.setCursor(Qt.PointingHandCursor)
             btn.setFixedHeight(35)
 
@@ -103,8 +102,8 @@ class MainScreen(QWidget):
         self.menu_layout.addWidget(self.delete_button)
         self.menu_layout.addWidget(self.log_button)
         self.menu_layout.addWidget(self.summary_button)
-        #self.menu_layout.addWidget(self.export_button)
-        #self.menu_layout.addWidget(self.import_button)
+        self.menu_layout.addWidget(self.export_button)
+        self.menu_layout.addWidget(self.import_button)
         self.menu_layout.addWidget(self.calendar_button)
         self.menu_layout.addWidget(self.pivot_button)
         self.menu_layout.addStretch()
@@ -117,17 +116,46 @@ class MainScreen(QWidget):
         logo_label.setAlignment(Qt.AlignCenter)
         self.menu_layout.addWidget(logo_label)
 
-        # Sol Panel Stil
-        left_panel = QWidget()
-        left_panel.setLayout(self.menu_layout)
-        left_panel.setFixedWidth(200)
-        left_panel.setStyleSheet("""
+        # === Sidebar Toggle Yapısı ===
+        self.menu_content = QWidget()
+        self.menu_content.setLayout(self.menu_layout)
+        self.menu_content.setFixedWidth(170)
+
+        self.toggle_menu_button = QPushButton("☰")
+        self.toggle_menu_button.setFixedWidth(30)
+        self.toggle_menu_button.setCursor(Qt.PointingHandCursor)
+        self.toggle_menu_button.setStyleSheet("""
+            QPushButton {
+                background-color: #2c3e50;
+                color: white;
+                font-size: 18px;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #3e5871;
+            }
+        """)
+        self.toggle_menu_button.clicked.connect(self.toggle_menu)
+
+        toggle_container = QWidget()
+        toggle_layout = QVBoxLayout(toggle_container)
+        toggle_layout.setContentsMargins(0, 0, 0, 0)
+        toggle_layout.setSpacing(0)
+        toggle_layout.addWidget(self.toggle_menu_button)
+        toggle_layout.addStretch()
+
+        self.left_panel = QWidget()
+        left_panel_layout = QHBoxLayout(self.left_panel)
+        left_panel_layout.setContentsMargins(0, 0, 0, 0)
+        left_panel_layout.setSpacing(0)
+        left_panel_layout.addWidget(toggle_container)
+        left_panel_layout.addWidget(self.menu_content)
+
+        self.left_panel.setStyleSheet("""
             QWidget {
                 background-color: #2c3e50;
                 color: white;
                 font-size: 13px;
-                padding: 0px;
-                margin: 0px;
             }
             QPushButton {
                 background-color: #34495e;
@@ -246,7 +274,7 @@ class MainScreen(QWidget):
         right_layout.addWidget(self.table)
 
         # Ana Layout'a Ekle
-        main_layout.addWidget(left_panel)
+        main_layout.addWidget(self.left_panel)
         main_layout.addWidget(right_panel)
 
         # Buton Fonksiyonları
@@ -261,7 +289,10 @@ class MainScreen(QWidget):
         self.calendar_button.clicked.connect(self.ac_takvim_ekrani)
 
         self.load_data()
-
+    def toggle_menu(self):
+        is_visible = self.menu_content.isVisible()
+        self.menu_content.setVisible(not is_visible)
+        
     def load_data(self, filtered=False):
         self.table.setRowCount(0)
         source = self.filtered_giderler if filtered else get_all_giderler()
